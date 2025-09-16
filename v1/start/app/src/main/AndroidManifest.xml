@@ -36,5 +36,10 @@
             android:name="firebase_performance_logcat_enabled"
             android:value="true" />
     </application>
-
+    <queries>
+        <package android:name="com.google.android.gms" />
+        <intent>
+            <action android:name="com.google.android.gms.signin.service.START" />
+        </intent>
+    </queries>
 </manifest>

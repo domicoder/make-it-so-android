@@ -15,7 +15,7 @@ android {
 
     defaultConfig {
         applicationId = "com.example.makeitso"
-        minSdk = 21
+        minSdk = 23
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
@@ -88,6 +88,8 @@ dependencies {
     implementation("com.google.firebase:firebase-perf")
     implementation("com.google.firebase:firebase-config")
     implementation("com.google.firebase:firebase-messaging")
+    // Import the Firebase BoM
+//    implementation(platform("com.google.firebase:firebase-bom:34.2.0"))
 
     //Test
     testImplementation("junit:junit:4.+")
