@@ -45,13 +45,16 @@ fun TasksScreen(
   viewModel: TasksViewModel = hiltViewModel()
 ) {
   val tasks = viewModel.tasks.collectAsStateWithLifecycle(emptyList())
+  val options by viewModel.options
+
   TasksScreenContent(
     onAddClick = viewModel::onAddClick,
     onSettingsClick = viewModel::onSettingsClick,
     onTaskCheckChange = viewModel::onTaskCheckChange,
     onTaskActionClick = viewModel::onTaskActionClick,
     openScreen = openScreen,
-    tasks = tasks.value
+    tasks = tasks.value,
+    options = options
   )
 
   LaunchedEffect(viewModel) { viewModel.loadTaskOptions() }
@@ -67,7 +70,8 @@ fun TasksScreenContent(
   onTaskCheckChange: (Task) -> Unit,
   onTaskActionClick: ((String) -> Unit, Task, String) -> Unit,
   openScreen: (String) -> Unit,
-  tasks: List<Task> = emptyList()
+  tasks: List<Task>,
+  options: List<String>
 ) {
   Scaffold(
     floatingActionButton = {
@@ -95,7 +99,7 @@ fun TasksScreenContent(
         items(tasks, key = { it.id }) { taskItem ->
           TaskItem(
             task = taskItem,
-            options = listOf(),
+            options = options,
             onCheckChange = { onTaskCheckChange(taskItem) },
             onActionClick = { action -> onTaskActionClick(openScreen, taskItem, action) }
           )
@@ -115,7 +119,9 @@ fun TasksScreenPreview() {
       onSettingsClick = { },
       onTaskCheckChange = { },
       onTaskActionClick = { _, _, _ -> },
-      openScreen = { }
+      openScreen = { },
+      tasks = emptyList(),
+      options = emptyList()
     )
   }
 }

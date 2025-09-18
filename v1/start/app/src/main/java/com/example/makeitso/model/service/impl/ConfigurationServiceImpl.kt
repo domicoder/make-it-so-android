@@ -20,6 +20,7 @@ import com.example.makeitso.BuildConfig
 import com.example.makeitso.R.xml as AppConfig
 import com.example.makeitso.model.service.ConfigurationService
 import com.example.makeitso.model.service.trace
+//import com.google.firebase.BuildConfig
 import com.google.firebase.Firebase
 import com.google.firebase.remoteconfig.get
 import com.google.firebase.remoteconfig.remoteConfig
@@ -40,10 +41,12 @@ class ConfigurationServiceImpl @Inject constructor() : ConfigurationService {
     remoteConfig.setDefaultsAsync(AppConfig.remote_config_defaults)
   }
 
-  override suspend fun fetchConfiguration(): Boolean = true
+  override suspend fun fetchConfiguration(): Boolean {
+    return remoteConfig.fetchAndActivate().await()
+  }
 
   override val isShowTaskEditButtonConfig: Boolean
-    get() = true
+    get() = remoteConfig[SHOW_TASK_EDIT_BUTTON_KEY].asBoolean()
 
   companion object {
     private const val SHOW_TASK_EDIT_BUTTON_KEY = "show_task_edit_button"
