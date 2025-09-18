@@ -45,7 +45,7 @@ class AccountServiceImpl @Inject constructor(private val auth: FirebaseAuth) : A
       awaitClose { auth.removeAuthStateListener(listener) }
     }
 
-  override suspend fun authenticate(email: String, password: String) {
+  override suspend fun authenticate(email: String, password: String): Unit = trace(SIGN_IN_WITH_EMAIL_AND_PASSWORD_TRACE) {
     auth.signInWithEmailAndPassword(email, password).await()
   }
 
@@ -57,12 +57,12 @@ class AccountServiceImpl @Inject constructor(private val auth: FirebaseAuth) : A
     auth.signInAnonymously().await()
   }
 
-  override suspend fun linkAccount(email: String, password: String) {
+  override suspend fun linkAccount(email: String, password: String): Unit = trace(LINK_ACCOUNT_TRACE) {
     val credential = EmailAuthProvider.getCredential(email, password)
     auth.currentUser!!.linkWithCredential(credential).await()
   }
 
-  override suspend fun deleteAccount() {
+  override suspend fun deleteAccount(): Unit = trace(DELETE_ACCOUNT_TRACE) {
     auth.currentUser!!.delete().await()
   }
 
@@ -78,5 +78,7 @@ class AccountServiceImpl @Inject constructor(private val auth: FirebaseAuth) : A
 
   companion object {
     private const val LINK_ACCOUNT_TRACE = "linkAccount"
+    private const val SIGN_IN_WITH_EMAIL_AND_PASSWORD_TRACE = "signInWithEmailAndPassword"
+    private const val DELETE_ACCOUNT_TRACE = "deleteAccount"
   }
 }
